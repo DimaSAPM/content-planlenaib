@@ -1,0 +1,147 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:1rem 0;width:100%}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.5rem}
+.leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;padding:4px 10px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);transition:background .15s}
+.leg:hover{background:var(--color-background-secondary)}
+.leg.active{background:var(--color-background-secondary)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.d1{background:#5DCAA5}.d2{background:#7F77DD}.d3{background:#EF9F27}
+.week-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.05em;text-transform:uppercase;margin:1.25rem 0 .5rem}
+.week{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:4px}
+.card{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:.75rem;cursor:pointer;transition:border-color .15s,background .15s;background:var(--color-background-primary)}
+.card:hover{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.card.selected{border-color:var(--color-border-primary);background:var(--color-background-secondary)}
+.card.empty{opacity:.25;cursor:default;pointer-events:none}
+.card-day{font-size:10px;color:var(--color-text-tertiary);margin-bottom:4px}
+.card-zone{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;border-radius:20px;padding:2px 7px;margin-bottom:6px}
+.z1{background:#E1F5EE;color:#0F6E56}.z2{background:#EEEDFE;color:#3C3489}.z3{background:#FAEEDA;color:#854F0B}
+.card-title{font-size:12px;font-weight:500;color:var(--color-text-primary);line-height:1.4}
+.card-fmt{font-size:10px;color:var(--color-text-tertiary);margin-top:4px}
+.detail{margin-top:1.5rem;border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);padding:1.25rem;background:var(--color-background-primary);display:none}
+.detail.show{display:block}
+.det-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem}
+.det-info{flex:1}
+.det-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:2px}
+.det-title{font-size:16px;font-weight:500;color:var(--color-text-primary);line-height:1.4;margin-bottom:.5rem}
+.det-sub{font-size:13px;color:var(--color-text-secondary);line-height:1.6}
+.det-cta{margin-top:.75rem;padding:.75rem 1rem;border-radius:var(--border-radius-md);background:var(--color-background-secondary);font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.det-cta strong{color:var(--color-text-primary);font-weight:500}
+.tip{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;margin-top:.75rem;line-height:1.5}
+.tip-icon{font-size:14px;flex-shrink:0;line-height:1.3}
+.close-btn{font-size:11px;color:var(--color-text-tertiary);cursor:pointer;border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:2px 10px;white-space:nowrap;flex-shrink:0}
+.close-btn:hover{color:var(--color-text-primary)}
+</style>
+<div class="wrap">
+<h2 class="sr-only">Контент-план сторис на перший місяць — Olena Shapoval</h2>
+<div class="legend">
+  <div class="leg active" data-filter="all"><span class="dot" style="background:#888"></span>Усі</div>
+  <div class="leg" data-filter="1"><span class="dot d1"></span>Людина</div>
+  <div class="leg" data-filter="2"><span class="dot d2"></span>Експерт</div>
+  <div class="leg" data-filter="3"><span class="dot d3"></span>Перехід → CTA</div>
+</div>
+
+<div id="calendar"></div>
+<div class="detail" id="detail">
+  <div class="det-top">
+    <div class="det-info">
+      <div class="det-label" id="d-label"></div>
+      <div class="det-title" id="d-title"></div>
+    </div>
+    <div class="close-btn" onclick="closeDetail()">закрити</div>
+  </div>
+  <div class="det-sub" id="d-sub"></div>
+  <div class="det-cta" id="d-cta"></div>
+  <div class="tip" id="d-tip"></div>
+</div>
+</div>
+
+<script>
+const days = ['Пн','Вт','Ср','Чт','Пт','Сб'];
+const weeks = [
+  {label:'Тиждень 1 — Знайомство',slots:[
+    {day:'Пн',zone:1,title:'Ранкова рутина + одна думка про роботу',fmt:'Відео з обличчям 15–30 сек',sub:'Знімаєш себе зранку — кава, ноутбук, щось живе. Поверх: одна чесна думка про те, що сьогодні в голові. Не мотиваційна, а реальна. Наприклад: "Сьогодні 3 дзвінки з клієнтами — і я вже знаю, який з них буде найскладнішим."',cta:'CTA відсутній. Завдання цього дня — нагадати аудиторії, що ти жива людина.',tip:'Не редагуй надто. Легкий шум, природне світло, жодних заставок — це й є "ефект автентичності".'},
+    {day:'Ср',zone:2,title:'Одна помилка, яку бачу в кожному другому рекламному кабінеті',fmt:'Говориш в камеру 20–40 сек',sub:'Конкретна помилка — без лекції. Наприклад: "Запускають рекламу без пікселя. Бюджет іде, даних нема, оптимізувати нема з чого. І це не поодинокий випадок." Фінал: пауза + погляд у камеру.',cta:'"Якщо хочеш перевірити, чи є це у тебе — пиши слово АУДИТ у директ."',tip:'Після цього стори — перевір директ. Перші відповіді на АУДИТ обробляй вручну, поки бот не налаштовано.'},
+    {day:'Пт',zone:3,title:'Кейс без імені: що ми знайшли за 60 хвилин',fmt:'Текст поверх фото або відео',sub:'Коротка історія: клієнт з ніші Х прийшов з такою проблемою. Думали — одне, виявилося — інше. Що змінили за одну зустріч і що це дало. Жодних цифр якщо не можна — важлива трансформація, не деталі.',cta:'"Відкриваю 2 місця на аудит цього тижня. Пиши АУДИТ — розберемо твій кабінет."',tip:'Обмеження "2 місця" — це FOMO-тригер. Навіть якщо місць більше, конкретна цифра знижує прокрастинацію.'},
+    {day:'Сб',zone:1,title:'Книга, яку зараз читаю',fmt:'Фото обкладинки + голос або текст',sub:'Показуєш обкладинку — одна думка, яка зачепила. Обовʼязково: як це повʼязано з твоєю практикою або клієнтами. Наприклад: "Читаю Кааль Ньюпорта — і розумію, чому більшість рекламістів не ростуть у доході."',cta:'Стікер "Питання" в кінці: "А ви читали? Що думаєте про цю книгу?"',tip:'Відповіді у директ = сигнал залученості для алгоритму. Навіть 5–10 відповідей суттєво підіймають охоплення наступних сторіс.'},
+  ]},
+  {label:'Тиждень 2 — Формуємо авторитет',slots:[
+    {day:'Пн',zone:1,title:'Особистий момент + паралель з бізнесом',fmt:'Відео або фото з коментарем',sub:'Не просто "ось моя донька" — а момент, який нагадав тобі щось про роботу. Наприклад: "Софія вчиться ходити і падає по 30 разів на день. І не плаче — встає і йде знову. Думаю про клієнтів, які кидають рекламу після першого невдалого запуску."',cta:'Немає. Просто людяний момент.',tip:'Цей формат працює на двох рівнях одночасно: особисте + експертне. Аудиторія зберігає такі сторіс і пересилає.'},
+    {day:'Вт',zone:2,title:'Жива реакція на чужу рекламу з стрічки',fmt:'Скриншот + голосовий коментар або текст',sub:'Зловив рекламне оголошення в стрічці — знімаєш скриншот (без бренду, якщо хочеш) і розбираєш: що спрацювало або провалилось і чому. Говориш як практик, не як теоретик.',cta:'В кінці стікер "Питання": "Надсилайте мені рекламу зі своєї стрічки — розберу в наступний раз."',tip:'Це безкінечний контент-генератор. Аудиторія почне надсилати приклади — і у тебе завжди є тема.'},
+    {day:'Чт',zone:2,title:'Запуск Q&A: питайте про рекламу в Meta',fmt:'Стікер "Питання" на нейтральному фоні',sub:'Одна картинка або відео з текстом: "Питайте будь-що про рекламу в Facebook та Instagram — відповім у п\'ятницю." Тема конкретна, не "питайте все підряд" — це знижує поріг для питань.',cta:'Немає. Збираєш матеріал для наступного дня.',tip:'Зберігай найкращі питання — це золота міна для ідей постів та майбутніх сторіс.'},
+    {day:'Сб',zone:1,title:'День у цифрах',fmt:'Текст поверх нейтрального фону, без обличчя',sub:'"Сьогодні: 3 дзвінки / 1 відмова від проєкту (і це правильне рішення) / 47 хвилин на оновлення кампанії / 1 несподіваний результат, який змінив мою думку про стратегію клієнта." Без пояснень — тільки факти.',cta:'Немає. Формат закінчується крапкою.',tip:'Цей формат показує масштаб роботи без хвастощів. Читач сам робить висновок про твою завантаженість і експертизу.'},
+  ]},
+  {label:'Тиждень 3 — Серійний контент + болі',slots:[
+    {day:'Пн',zone:2,title:'Серія: Розбираємо кейс по кроках. День 1 з 3',fmt:'Відео або текст-слайди',sub:'"Цього тижня розбираю один реальний кейс по кроках. День 1: вихідна ситуація." Описуєш клієнта анонімно — ніша, бюджет (приблизно), що не працювало і як вони це пояснювали собі.',cta:'"Зайди завтра — буде найцікавіше."',tip:'Серійний контент привчає аудиторію заходити щодня. Алгоритм це помічає — зростає охоплення кожної наступної частини.'},
+    {day:'Ср',zone:2,title:'Серія: Кейс. День 2 — що ми знайшли насправді',fmt:'Відео або текст-слайди',sub:'Продовження: що виявилося на аудиті. Де була реальна проблема — не там, де клієнт думав. Конкретика без зайвих слів. Один ключовий інсайт, який змінив все.',cta:'В кінці стікер "Опитування": "Ти б здогадався, де проблема?" Так / Ні',tip:'Опитування посеред серії дає буст охоплення і показує тобі, наскільки аудиторія "прокачана".'},
+    {day:'Чт',zone:3,title:'Серія: Кейс. День 3 + перехід до CTA',fmt:'Відео або текст-слайди',sub:'Фінал: що зробили, який результат. Коротко і конкретно. Потім природний перехід: "Якщо ти впізнав свою ситуацію в цьому кейсі — можливо, варто розібрати і твій кабінет."',cta:'"Пиши АУДИТ у директ — обговоримо, чи є сенс."',tip:'CTA після кейсу сприймається не як реклама, а як логічне продовження. Це найм\'якший і найефективніший перехід до продажу.'},
+    {day:'Пт',zone:3,title:'Міні-тест: перевір свою рекламу за 3 питання',fmt:'Серія з 3–4 слайдів зі стікером "Опитування"',sub:'Слайд 1: "У тебе налаштована наскрізна аналітика?" Так/Ні. Слайд 2: "Ти знаєш вартість ліда по кожній кампанії окремо?" Так/Ні. Слайд 3: "Ти знаєш, яка аудиторія дає найдешевші конверсії?" Так/Ні. Слайд 4: результат.',cta:'"Якщо хоч раз відповів Ні — у твоїй рекламі є дірки. Хочеш знайти їх разом? Пиши АУДИТ."',tip:'Це кваліфікація аудиторії через гейміфікацію. Ті, хто відповіли Ні — вже усвідомили біль. Вони найгарячіші ліди.'},
+  ]},
+  {label:'Тиждень 4 — Довіра + відкрите вікно',slots:[
+    {day:'Вт',zone:2,title:'Непопулярна думка про рекламу',fmt:'Говориш в камеру, впевнено і коротко',sub:'Одне спірне твердження без пом\'якшень. Наприклад: "Більшість малого бізнесу витрачає гроші на таргет, коли ще не готові до нього. І це не проблема бюджету — це проблема продукту." Потім — твоя аргументація за 30 секунд.',cta:'Стікер "Питання" або просто заклик відповісти в директ.',tip:'Спірність = реакції. Люди, які не погоджуються, також пишуть — і це теж сигнал для алгоритму. Головне — мати чітку аргументацію.'},
+    {day:'Ср',zone:2,title:'Відповіді на питання з Q&A (тиждень 2)',fmt:'Відео або текст — по 1 питанню на слайд',sub:'Беремо 3–5 найкращих питань зі стікера з тижня 2. На кожне — коротка, конкретна відповідь. Без лекцій. Якщо питання торкається твоєї послуги — згадуй аудит природно, не нав\'язливо.',cta:'В кінці: "Залишились питання? Пиши в директ — відповім."',tip:'Відповіді на реальні питання підписників — найсильніший формат для відчуття живого діалогу. Аудиторія бачить, що ти чуєш їх.'},
+    {day:'Пт',zone:2,title:'Провал тижня: що пішло не так і що я з цього взяла',fmt:'Говориш в камеру або текст на фото',sub:'Один реальний провал цього місяця — твій або клієнтський (анонімно). Що очікувалось, що сталось, який висновок. Не "все добре, ми впорались" — а чесно: "Ця помилка коштувала нам Х і ось що я тепер роблю інакше."',cta:'Немає. Цей формат — про довіру, а не продаж.',tip:'Дослідження Nielsen: контент про невдачі генерує на 40% більше збережень, ніж кейси успіху. Люди зберігають те, у чому впізнають себе.'},
+    {day:'Сб',zone:3,title:'Відкриваю 3 місця на аудит рекламного кабінету',fmt:'Відео з обличчям або гарний текстовий слайд',sub:'Не "записуйтесь на консультацію". А конкретно: що таке аудит у тебе, скільки часу займає, що людина отримає на виході (список конкретних висновків, пріоритетів для виправлення). І чому саме 3 місця — тому що більше якісно не вести паралельно.',cta:'"Пиши АУДИТ у директ — надішлю коротку анкету і домовимось про час."',tip:'Фінал місяця — найгарячіший момент для CTA. Аудиторія вже чотири тижні бачила тебе як людину і як експерта. Довіра накопичена — тепер вона конвертується.'},
+  ]}
+];
+
+const zoneNames=['','Людина','Експерт','Перехід → CTA'];
+const zoneClass=['','z1','z2','z3'];
+const dotClass=['','d1','d2','d3'];
+
+let selected=null;
+let filter='all';
+
+function render(){
+  const cal=document.getElementById('calendar');
+  cal.innerHTML='';
+  weeks.forEach((week,wi)=>{
+    const wl=document.createElement('div');
+    wl.className='week-label';
+    wl.textContent=week.label;
+    cal.appendChild(wl);
+    const wg=document.createElement('div');
+    wg.className='week';
+    week.slots.forEach((s,si)=>{
+      const c=document.createElement('div');
+      const show=filter==='all'||filter===String(s.zone);
+      c.className='card'+(show?'':' empty');
+      if(selected&&selected[0]===wi&&selected[1]===si)c.classList.add('selected');
+      c.innerHTML=`<div class="card-day">${s.day}</div><span class="card-zone ${zoneClass[s.zone]}"><span class="dot ${dotClass[s.zone]}" style="width:6px;height:6px;border-radius:50%;display:inline-block"></span>${zoneNames[s.zone]}</span><div class="card-title">${s.title}</div><div class="card-fmt">${s.fmt}</div>`;
+      if(show)c.onclick=()=>selectCard(wi,si);
+      wg.appendChild(c);
+    });
+    cal.appendChild(wg);
+  });
+}
+
+function selectCard(wi,si){
+  if(selected&&selected[0]===wi&&selected[1]===si){closeDetail();return;}
+  selected=[wi,si];
+  const s=weeks[wi].slots[si];
+  document.getElementById('d-label').innerHTML=`<span class="card-zone ${zoneClass[s.zone]}" style="margin-right:8px"><span class="dot ${dotClass[s.zone]}" style="width:6px;height:6px;border-radius:50%;display:inline-block"></span>${zoneNames[s.zone]}</span>${weeks[wi].label} · ${s.day}`;
+  document.getElementById('d-title').textContent=s.title;
+  document.getElementById('d-sub').textContent=s.sub;
+  document.getElementById('d-cta').innerHTML=s.cta?`<strong>CTA:</strong> ${s.cta}`:'<strong>CTA:</strong> немає — цей день про довіру, не про продаж.';
+  document.getElementById('d-tip').innerHTML=`<span class="tip-icon">★</span><span>${s.tip}</span>`;
+  const det=document.getElementById('detail');
+  det.classList.add('show');
+  det.scrollIntoView({behavior:'smooth',block:'nearest'});
+  render();
+}
+
+function closeDetail(){selected=null;document.getElementById('detail').classList.remove('show');render();}
+
+document.querySelectorAll('.leg').forEach(l=>{
+  l.onclick=()=>{
+    filter=l.dataset.filter;
+    document.querySelectorAll('.leg').forEach(x=>x.classList.remove('active'));
+    l.classList.add('active');
+    render();
+  };
+});
+
+render();
+</script>
